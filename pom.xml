@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.co.bithatch</groupId>
+    <artifactId>flatpak-maven-example</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>A simple JavaFX based browser that demonstrates flatpak-maven-plugin</description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <javafx.version>25-ea+5</javafx.version> </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+				<groupId>uk.co.bithatch</groupId>
+				<artifactId>flatpak-maven-plugin</artifactId>
+                <version>0.0.5</version>
+                <executions>
+                    <execution>
+                    	<id>my-package-generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                        	<!-- Automatic main detection doesn't current work with
+							modular applications, so we must specify the module
+							and main class ourselves -->
+							<mainClass>uk.co.bithatch.flatpakmaven.example/uk.co.bithatch.flatpakmaven.example.SimpleBrowser</mainClass>
+							
+							<!-- Avoids some warnings in the console -->
+							<vmArgs>
+								<vmArg>--enable-native-access=javafx.graphics</vmArg>	
+								<vmArg>--enable-native-access=javafx.web</vmArg>
+							</vmArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                    	<id>my-package-build</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                        	<install>true</install>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
